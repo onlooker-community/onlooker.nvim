@@ -21,7 +21,7 @@ jobs:
               run: |
                 install_dir="$RUNNER_TEMP/stylua-bin"
                 mkdir -p "$install_dir"
-                curl -fsSL "https://github.com/JohnnyMorganz/StyLua/releases/download/${{ inputs.stylua-version }}/stylua-linux-x86_64.zip" -o "$RUNNER_TEMP/stylua.zip"
+                curl -fsSL "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.4.0/stylua-linux-x86_64.zip" -o "$RUNNER_TEMP/stylua.zip"
                 unzip -q "$RUNNER_TEMP/stylua.zip" -d "$install_dir"
                 chmod +x "$install_dir/stylua"
                 echo "$install_dir" >> "$GITHUB_PATH"
