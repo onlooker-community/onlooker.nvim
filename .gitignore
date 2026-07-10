@@ -1,0 +1,12 @@
+# Neovim
+*.swp
+*.swo
+*~
+
+# mini.nvim CI clone
+.ci/
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini

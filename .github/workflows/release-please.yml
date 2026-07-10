@@ -1,0 +1,40 @@
+name: Release
+
+on:
+    workflow_dispatch:
+    push:
+      branches: [main]
+
+jobs:
+    release-please:
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        concurrency:
+            group: ${{ format('{0}:{1}:{2}', github.workflow, github.repository, github.ref) }}
+            cancel-in-progress: true
+        permissions:
+            contents: write
+            issues: write
+            pull-requests: write
+        outputs:
+            release_created: ${{ steps.release.outputs.release_created }}
+            tag_name: ${{ steps.release.outputs.tag_name }}
+            raw_outputs_json: ${{ toJSON(steps.release.outputs) }}
+        steps:
+          - id: release
+            uses: googleapis/release-please-action@v5
+            with:
+                config-file: 'release-please-config.json'
+                manifest-file: '.release-please-manifest.json'
+                token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+          - name: Summary
+            run: |
+                {
+                  echo "### Release Please Summary"
+                  echo "- Release created: ${{ steps.release.outputs.release_created }}"
+                  echo "- Tag name: ${{ steps.release.outputs.tag_name }}"
+                  echo "- Raw outputs JSON: ${{ steps.release.outputs.raw_outputs_json }}"
+                } >> "$GITHUB_STEP_SUMMARY"
+
+    

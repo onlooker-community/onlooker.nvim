@@ -1,0 +1,29 @@
+name: Format
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    format:
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        concurrency:
+            group: ${{ format('{0}:{1}:{2}', github.workflow, github.repository, github.ref) }}
+            cancel-in-progress: true
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v7
+
+            - name: Install stylua
+              run: |
+                install_dir="$RUNNER_TEMP/stylua-bin"
+                mkdir -p "$install_dir"
+                curl -fsSL "https://github.com/JohnnyMorganz/StyLua/releases/download/${{ inputs.stylua-version }}/stylua-linux-x86_64.zip" -o "$RUNNER_TEMP/stylua.zip"
+                unzip -q "$RUNNER_TEMP/stylua.zip" -d "$install_dir"
+                chmod +x "$install_dir/stylua"
+                echo "$install_dir" >> "$GITHUB_PATH"
+            - name: Check formatting
+              run: stylua --check "lua/ plugin/ tests/"
