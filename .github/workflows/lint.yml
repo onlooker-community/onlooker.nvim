@@ -17,8 +17,5 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v7
 
-            - name: Install Luacheck
-              run: sudo apt-get update && sudo apt-get install -y lua-check
-            
-            - name: Run Luacheck
-              run: luacheck "lua/ plugin/ tests/"
+            - name: Luacheck linter
+              uses: lunarmodules/luacheck@v1
