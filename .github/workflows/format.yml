@@ -16,14 +16,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v7
-
-            - name: Install stylua
-              run: |
-                install_dir="$RUNNER_TEMP/stylua-bin"
-                mkdir -p "$install_dir"
-                curl -fsSL "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.4.0/stylua-linux-x86_64.zip" -o "$RUNNER_TEMP/stylua.zip"
-                unzip -q "$RUNNER_TEMP/stylua.zip" -d "$install_dir"
-                chmod +x "$install_dir/stylua"
-                echo "$install_dir" >> "$GITHUB_PATH"
-            - name: Check formatting
-              run: stylua --check "lua/ plugin/ tests/"
+            - uses: JohnnyMorganz/stylua-action@v5
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                version: latest
+                args: --check .
