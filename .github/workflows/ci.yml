@@ -1,0 +1,32 @@
+# The org's `Require CI` ruleset requires one status check on the default
+# branch: "All checks passed". This repository has no automated checks yet,
+# but a required check that never reports leaves every pull request pending
+# forever - so the context has to exist even where there is nothing to run.
+#
+# It is also what makes "enable auto-merge" work here. GitHub only offers the
+# button when a pull request is still waiting on something; with no required
+# check and no required approvals, a PR is mergeable the moment it opens and
+# there is nothing to auto-merge.
+#
+# When real checks arrive, add them as jobs and list them in `needs` below.
+# Keep the `name:` exactly as it is - the ruleset matches on that string.
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  required:
+    name: All checks passed
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check results
+        run: echo "No automated checks are defined for this repository yet."
